@@ -19,7 +19,7 @@ subscribe = [
     "otherTopic"
 ]
 
-# Expire values after 5 Minutes. Can be overridden in the [[topic]] sections.
+# Expire metrics after 5 Minutes. Can be overridden in the [[topic]] sections.
 # Comment to disable.
 expire = 300
 
@@ -32,18 +32,22 @@ expire = 300
 # If match is not given, or the regex does not return a __metric__ group,
 # the topic name will be split at / and the last part will be used for
 # the metric name.
-match = 'sensor/(?P<sensor_name>\w+)/(?P<__metric__>\w+)'
-# You may override expire for individual topics
-expire = 60
+match  = 'sensor/(?P<sensor_name>\w+)/(?P<__metric__>\w+)'
+
 
 [[topic]]
-match  = 'slow_sensor/(?P<sensor_name>\w+)/(?P<__metric__>\w+)'
+match  = 'sensor/slow_sensor/super_slow_metric'
+
+# You may override expire for individual topics
+expire = 900
+
 # You can specify a hardcoded metric name to ignore the one from the regex
 # and also not have one auto-generated.
-metric = "hardcoded_metric_name"
+metric = "just_a_metric"
+
 
 [[topic]]
-match  = 'sucky_sensor/(?P<sensor_name>\w+)/(?P<__metric__>\w+)'
+match  = 'sensor/sucky_sensor/.*'
 # If you want to ignore certain topics that are unfortunately included
 # in your subscriptions, set this:
 ignore = true
