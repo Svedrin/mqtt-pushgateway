@@ -1,0 +1,13 @@
+[Unit]
+WantedBy=multi-user.target
+Description=Prometheus MQTT Exporter
+After=network.target
+
+[Service]
+Environment=PYTHONIOENCODING=utf-8
+WorkingDirectory=/opt/mqtt-exporter
+ExecStart=/opt/mqtt-exporter/mqtt-exporter.py
+User=prometheus
+
+[Install]
+WantedBy=multi-user.target
