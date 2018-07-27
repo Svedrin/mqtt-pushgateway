@@ -30,7 +30,7 @@ expire = 300
 # The special group '__metric__', if present, will denote the metric name and
 # NOT be added as a keyword.
 # If match is not given, or the regex does not return a __metric__ group,
-# the metric name will be split at / and the last part will be used for
+# the topic name will be split at / and the last part will be used for
 # the metric name.
 match = 'sensor/(?P<sensor_name>\w+)/(?P<__metric__>\w+)'
 # You may override expire for individual topics
