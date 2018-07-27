@@ -58,20 +58,23 @@ class Topic(object):
         self.value = value
         self.last_update = datetime.now()
 
-    def __str__(self):
+    def is_valid(self):
         if self.ignore:
-            return ""
+            return False
 
         data_age = (datetime.now() - self.last_update).total_seconds()
 
         if self.expire is not None and data_age > self.expire:
-            return ""
+            return False
 
+        return True
+
+    def __str__(self):
         return "%(metric)s{%(kwds)s} %(value)f\n%(metric)s_data_age{%(kwds)s} %(age)f" % dict(
             metric = self.metric,
             kwds   = ','.join([ '%s="%s"' % item for item in self.keywords.items() ]),
             value  = self.value,
-            age    = data_age
+            age    = (datetime.now() - self.last_update).total_seconds()
         )
 
 
@@ -84,9 +87,10 @@ def http_index():
 
 @app.route("/metrics")
 def http_metrics():
-    content = []
-    for metric in metrics.values():
-        content.append(str(metric))
+    content = [str(metric)
+        for metric in metrics.values()
+        if metric.is_valid()
+    ]
     return Response('\n'.join(content + ['']), mimetype="text/plain")
 
 
