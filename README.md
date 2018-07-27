@@ -6,6 +6,8 @@ This exporter works pretty much like the push gateway: You let it listen to
 some interesting MQTT topics, it collects data into metrics and waits to
 be scraped by Prometheus.
 
+Caveat: Only float values are supported. Anything else will be ignored.
+
 # Features
 
 *   For each metric, a "metric_data_age" metric is exported that tells
