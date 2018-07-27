@@ -1,0 +1,50 @@
+# Copy this file to config.toml to use it.
+
+[exporter]
+listen = "0.0.0.0"
+port   = 9595
+
+# Configure your MQTT broker's address and credentials here.
+[mqtt]
+client_id = "mqtt_exporter"
+broker    = "192.168.1.234"
+port      = 1883
+username  = "user"
+password  = "pass"
+
+# List some keys we should subscribe to. Use '#' to subscribe to *everything*.
+# We will ignore any messages that can't be directly parsed as floats.
+subscribe = [
+    'sensor/#',
+    "otherTopic"
+]
+
+# Expire values after 5 Minutes. Can be overridden in the [[topic]] sections.
+# Comment to disable.
+expire = 300
+
+
+[[topic]]
+# You can configure a regular expression to match the topic name against.
+# Match groups will be converted to Prometheus keywords.
+# The special group '__metric__', if present, will denote the metric name and
+# NOT be added as a keyword.
+# If match is not given, or the regex does not return a __metric__ group,
+# the metric name will be split at / and the last part will be used for
+# the metric name.
+match = 'sensor/(?P<sensor_name>\w+)/(?P<__metric__>\w+)'
+# You may override expire for individual topics
+# expire = 60
+
+[[topic]]
+match  = 'slow_sensor/(?P<sensor_name>\w+)/(?P<__metric__>\w+)'
+# You can specify a hardcoded metric name to ignore the one from the regex
+# and also not have one auto-generated.
+metric = "hardcoded_metric_name"
+
+[[topic]]
+match  = 'sucky_sensor/(?P<sensor_name>\w+)/(?P<__metric__>\w+)'
+# If you want to ignore certain topics that are unfortunately included
+# in your subscribtions, set this:
+ignore = true
+
