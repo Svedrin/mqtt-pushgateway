@@ -34,7 +34,7 @@ expire = 300
 # the metric name.
 match = 'sensor/(?P<sensor_name>\w+)/(?P<__metric__>\w+)'
 # You may override expire for individual topics
-# expire = 60
+expire = 60
 
 [[topic]]
 match  = 'slow_sensor/(?P<sensor_name>\w+)/(?P<__metric__>\w+)'
@@ -45,6 +45,6 @@ metric = "hardcoded_metric_name"
 [[topic]]
 match  = 'sucky_sensor/(?P<sensor_name>\w+)/(?P<__metric__>\w+)'
 # If you want to ignore certain topics that are unfortunately included
-# in your subscribtions, set this:
+# in your subscriptions, set this:
 ignore = true
 
