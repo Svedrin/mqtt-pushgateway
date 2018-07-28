@@ -6,7 +6,7 @@ port   = 9595
 
 # Configure your MQTT broker's address and credentials here.
 [mqtt]
-client_id = "mqtt_exporter"
+client_id = "mqtt_exporter-%(hostname)s"
 broker    = "192.168.1.234"
 port      = 1883
 username  = "user"

@@ -5,6 +5,7 @@
 import re
 import pytoml
 import logging
+import socket
 import time
 
 import paho.mqtt.client as mqttClient
@@ -105,7 +106,9 @@ def on_message(client, userdata, message):
 
 
 def main():
-    client = mqttClient.Client(config["mqtt"]["client_id"])
+    client = mqttClient.Client(config["mqtt"]["client_id"] % dict(
+        hostname=socket.gethostname()
+    ))
     client.username_pw_set(config["mqtt"]["username"], config["mqtt"]["password"])
     client.on_message = on_message
 
