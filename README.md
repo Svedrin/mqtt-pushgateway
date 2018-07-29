@@ -24,7 +24,7 @@ Caveat: Only float values are supported. Anything else will be ignored.
 *   Each metric is accompanied by a `<metric>_data_age` metric, that tells us
     when the last update occurred:
 
-        temperature_data_age{mqtt_topic="sensor/garage/temperature",sensor_name="garage"} 7
+        mqtt_data_age{mqtt_topic="sensor/garage/temperature",sensor_name="garage",metric="temperature"} 7
 
     By setting a threshold on this value, you can detect and alert on sensors
     being broken somehow and not sending updates anymore.
