@@ -21,7 +21,7 @@ Caveat: Only float values are supported. Anything else will be ignored.
 
         temperature{mqtt_topic="sensor/garage/temperature",sensor_name="garage"} 29.3
 
-*   Each metric is accompanied by a `<metric>_data_age` metric, that tells us
+*   Each metric is accompanied by an `mqtt_data_age` metric, that tells us
     when the last update occurred:
 
         mqtt_data_age{mqtt_topic="sensor/garage/temperature",sensor_name="garage",metric="temperature"} 7
