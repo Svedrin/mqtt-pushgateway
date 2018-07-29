@@ -64,9 +64,10 @@ class Topic(object):
 
         if self.expire is not None and data_age > self.expire:
             # metric is expired, return data age only
-            template = "%(metric)s_data_age{%(kwds)s} %(age)f"
+            template =  '%(metric)s_data_age{%(kwds)s,mqtt_type="data_age"} %(age)f'
         else:
-            template = "%(metric)s{%(kwds)s} %(value)f\n%(metric)s_data_age{%(kwds)s} %(age)f"
+            template = ('%(metric)s{%(kwds)s,mqtt_type="value"} %(value)f\n'
+                        '%(metric)s_data_age{%(kwds)s,mqtt_type="data_age"} %(age)f')
 
         return template % dict(
             metric = self.metric,
