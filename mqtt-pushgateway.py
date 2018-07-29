@@ -15,7 +15,7 @@ from datetime    import datetime
 
 from flask import Flask, Response, redirect
 
-app = Flask("mqtt_exporter")
+app = Flask("mqtt_pushgateway")
 
 with open("config.toml") as fd:
     config = pytoml.load(fd)

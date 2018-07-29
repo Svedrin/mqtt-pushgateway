@@ -1,8 +1,6 @@
-# mqtt-exporter
+# Prometheus Exporter for metrics received via MQTT
 
-## Prometheus Exporter for metrics received via MQTT
-
-This exporter works pretty much like the push gateway: You let it listen to
+This exporter provides a push gateway for MQTT: You let it listen to
 some interesting MQTT topics, it collects data into metrics and waits to
 be scraped by Prometheus.
 
@@ -38,4 +36,4 @@ Caveat: Only float values are supported. Anything else will be ignored.
 
 * `apt-get install python3-pytoml python3-paho-mqtt python3-flask`.
 * Copy `config.example.toml` to `config.toml` and adapt it to your needs.
-* Run mqtt-exporter.py. (See [mqtt-exporter.service](mqtt-exporter.service))
+* Run mqtt-pushgateway.py. (See [mqtt-pushgateway.service](mqtt-pushgateway.service))
