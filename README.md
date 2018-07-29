@@ -8,11 +8,6 @@ Caveat: Only float values are supported. Anything else will be ignored.
 
 # Features
 
-*   For each metric, a "metric_data_age" metric is exported that tells
-    Prometheus when was the last time we received an update for this metric.
-
-*   Allows metrics to expire if we don't get updates for a while.
-
 *   Topics can be matched against a set of regular expressions to convert
     parts of their names into Prometheus keywords. Thus, a topic name such as
 
@@ -26,11 +21,6 @@ Caveat: Only float values are supported. Anything else will be ignored.
 
         temperature{mqtt_topic="sensor/garage/temperature",sensor_name="garage"} 29.3
 
-*   Topics can have individual expiry configurations.
-
-*   Topics that were matched in a subscription pattern can be hidden from the
-    result through a topic configuration.
-
 *   Each metric is accompanied by a `<metric>_data_age` metric, that tells us
     when the last update occurred:
 
@@ -38,6 +28,16 @@ Caveat: Only float values are supported. Anything else will be ignored.
 
     By setting a threshold on this value, you can detect and alert on sensors
     being broken somehow and not sending updates anymore.
+
+*   Allows metrics to expire if we don't get updates for a while. When a metric
+    expires, its value won't be exported anymore, but data_age will continue
+    to be exported. Thus, you can expire a metric after 2 minutes, but only
+    after 5 minutes send an alert.
+
+    Each Topic can have an individual expiry configuration.
+
+*   Topics that were matched in a subscription pattern can be hidden from the
+    result through a topic configuration.
 
 
 # Installation
