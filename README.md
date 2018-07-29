@@ -31,6 +31,14 @@ Caveat: Only float values are supported. Anything else will be ignored.
 *   Topics that were matched in a subscription pattern can be hidden from the
     result through a topic configuration.
 
+*   Each metric is accompanied by a `<metric>_data_age` metric, that tells us
+    when the last update occurred:
+
+        temperature_data_age{mqtt_topic="sensor/garage/temperature",sensor_name="garage"} 7
+
+    By setting a threshold on this value, you can detect and alert on sensors
+    being broken somehow and not sending updates anymore.
+
 
 # Installation
 
