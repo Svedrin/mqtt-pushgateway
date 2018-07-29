@@ -2,7 +2,7 @@
 
 [exporter]
 listen = "0.0.0.0"
-port   = 9595
+port   = 9466
 
 # Configure your MQTT broker's address and credentials here.
 [mqtt]
