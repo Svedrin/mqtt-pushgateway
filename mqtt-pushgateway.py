@@ -11,7 +11,7 @@ import time
 import paho.mqtt.client as mqttClient
 
 from collections import defaultdict
-from datetime    import datetime
+from datetime    import datetime, timedelta
 
 from flask import Flask, Response, redirect
 
@@ -59,6 +59,10 @@ class Topic(object):
         self.value = value
         self.last_update = datetime.now()
 
+    @property
+    def forget(self):
+        return datetime.now() - self.last_update > timedelta(hours=1)
+
     def __str__(self):
         data_age = (datetime.now() - self.last_update).total_seconds()
 
@@ -88,7 +92,7 @@ def http_index():
 def http_metrics():
     content = [str(metric)
         for metric in metrics.values()
-        if not metric.ignore
+        if not metric.ignore and not metric.forget
     ]
     return Response('\n'.join(content + ['']), mimetype="text/plain")
 
