@@ -29,6 +29,8 @@ class Topic(object):
         self.last_update = datetime.fromtimestamp(0)
         self.expire      = config["mqtt"].get("expire")
         self.ignore      = False
+        self.known_vals  = set([])
+        self.is_numeric  = True
 
     def update(self, topic, value):
         # topic is e.g. sensors/somewhere/temperature
@@ -56,7 +58,14 @@ class Topic(object):
 
             self.keywords["mqtt_topic"] = topic
 
-        self.value = value
+        try:
+            self.value = float(value)
+            self.is_numeric = True
+        except (TypeError, ValueError):
+            self.value = value.decode("utf-8")
+            self.known_vals.add(self.value)
+            self.is_numeric = False
+
         self.last_update = datetime.now()
 
     @property
@@ -66,19 +75,37 @@ class Topic(object):
     def __str__(self):
         data_age = (datetime.now() - self.last_update).total_seconds()
 
-        if self.expire is not None and data_age > self.expire:
-            # metric is expired, return data age only
-            template =  'mqtt_data_age{%(kwds)s,metric="%(metric)s"} %(age)f'
-        else:
-            template = ('%(metric)s{%(kwds)s} %(value)f\n'
-                        'mqtt_data_age{%(kwds)s,metric="%(metric)s"} %(age)f')
+        if self.is_numeric:
+            if self.expire is not None and data_age > self.expire:
+                # metric is expired, return data age only
+                template =  'mqtt_data_age{%(kwds)s,metric="%(metric)s"} %(age)f'
+            else:
+                template = ('%(metric)s{%(kwds)s} %(value)f\n'
+                            'mqtt_data_age{%(kwds)s,metric="%(metric)s"} %(age)f')
 
-        return template % dict(
-            metric = self.metric,
-            kwds   = ','.join([ '%s="%s"' % item for item in self.keywords.items() ]),
-            value  = self.value,
-            age    = data_age
-        )
+            return template % dict(
+                metric = self.metric,
+                kwds   = ','.join([ '%s="%s"' % item for item in self.keywords.items() ]),
+                value  = self.value,
+                age    = data_age
+            )
+
+        else:
+            series = ['mqtt_data_age{%(kwds)s,metric="%(metric)s"} %(age)f' % dict(
+                metric = self.metric,
+                kwds   = ','.join([ '%s="%s"' % item for item in self.keywords.items() ]),
+                age    = data_age
+            )]
+            if self.expire is None or data_age < self.expire:
+                for known_val in self.known_vals:
+                    # generate one time series for each known value, where the value is 1
+                    # for the current value and 0 for all else
+                    series.append('%(metric)s{%(kwds)s} %(value)f' % dict(
+                        metric = self.metric,
+                        kwds   = ','.join([ '%s="%s"' % item for item in dict(self.keywords, **{self.metric: known_val}).items() ]),
+                        value  = int(known_val == self.value)
+                    ))
+            return "\n".join(series)
 
 
 metrics = defaultdict(lambda: Topic())
@@ -99,12 +126,11 @@ def http_metrics():
 
 def on_message(client, userdata, message):
     try:
-        floatval = float(message.payload)
-    except (TypeError, ValueError):
-        logging.warning("Value is not a float: %s => %s", message.topic, message.payload)
+        metrics[message.topic].update(message.topic, message.payload)
+    except:
+        logging.warning("Value is neither numeric nor valid utf-8, ignored", exc_info=True)
     else:
         logging.info("Message received: %s => %s", message.topic, message.payload)
-        metrics[message.topic].update(message.topic, floatval)
 
 
 def main():
