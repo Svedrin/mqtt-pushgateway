@@ -141,7 +141,7 @@ def main():
     client.on_message = on_message
 
     def on_connect(client, userdata, flags, result):
-        print("subscribing")
+        logging.info("subscribing")
         for topic in config["mqtt"]["subscribe"]:
             client.subscribe(topic)
 
