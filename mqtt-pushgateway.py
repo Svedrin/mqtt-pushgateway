@@ -140,12 +140,18 @@ def main():
     client.username_pw_set(config["mqtt"]["username"], config["mqtt"]["password"])
     client.on_message = on_message
 
+    def on_connect(client, userdata, flags, result):
+        print("subscribing")
+        for topic in config["mqtt"]["subscribe"]:
+            client.subscribe(topic)
+
+    client.on_connect = on_connect
+
+
     client.connect(config["mqtt"]["broker"], port=config["mqtt"]["port"])
 
     client.loop_start()
 
-    for topic in config["mqtt"]["subscribe"]:
-        client.subscribe(topic)
 
     app.debug = False
 
