@@ -6,4 +6,4 @@ COPY . /app
 WORKDIR /config
 
 EXPOSE 9466
-CMD [ "/app/mqtt-pushgateway.py" ]
+CMD [ "/usr/bin/python3", "/app/mqtt-pushgateway.py" ]
