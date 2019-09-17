@@ -1,9 +1,11 @@
-FROM python:3.7-slim-buster
+FROM alpine:latest
 
-RUN apt-get update && apt-get -y install python3-pytoml python3-paho-mqtt python3-flask
+RUN apk add --no-cache python3
 
 COPY . /app
 WORKDIR /config
+
+RUN pip3 install --no-cache-dir -r /app/requirements.txt
 
 EXPOSE 9466
 CMD [ "/usr/bin/python3", "/app/mqtt-pushgateway.py" ]
