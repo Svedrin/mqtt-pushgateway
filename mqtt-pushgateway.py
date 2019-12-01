@@ -7,6 +7,7 @@ import pytoml
 import logging
 import socket
 import time
+import json
 
 import paho.mqtt.client as mqttClient
 
@@ -124,13 +125,23 @@ def http_metrics():
     return Response('\n'.join(content + ['']), mimetype="text/plain")
 
 
-def on_message(client, userdata, message):
+def update_topic(topic, message):
     try:
-        metrics[message.topic].update(message.topic, message.payload)
+        metrics[topic].update(topic, message)
     except:
         logging.warning("Value is neither numeric nor valid utf-8, ignored", exc_info=True)
     else:
-        logging.info("Message received: %s => %s", message.topic, message.payload)
+        logging.info("Message received: %s => %s", topic, message)
+
+
+def on_message(client, userdata, message):
+    try:
+        json_message = json.loads(message.payload)
+        for k, v in json_message.items():
+            topic = "{}/{}".format(message.topic, k)
+            update_topic(topic, v)
+    except (ValueError):
+        update_topic(message.topic, message.payload)
 
 
 def main():
