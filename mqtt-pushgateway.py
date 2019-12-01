@@ -62,7 +62,7 @@ class Topic(object):
             self.value = float(value)
             self.is_numeric = True
         except (TypeError, ValueError):
-            self.value = value.decode("utf-8")
+            self.value = value
             self.known_vals.add(self.value)
             self.is_numeric = False
 
