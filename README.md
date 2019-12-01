@@ -4,6 +4,9 @@ This exporter provides a push gateway for MQTT: You let it listen to
 some interesting MQTT topics, it collects data into metrics and waits to
 be scraped by Prometheus.
 
+Messages that can be parsed as JSON will log a unique metric per key:value pair
+using a 'virtual' topic of `topic/key`.
+
 Caveat: Only float values are supported. Anything else will be ignored.
 
 # Features
@@ -39,6 +42,17 @@ Caveat: Only float values are supported. Anything else will be ignored.
 *   Topics that were matched in a subscription pattern can be hidden from the
     result through a topic configuration.
 
+*   JSON messages record each key:value pair as a unique metric, eg: the payload:
+
+        {"temperature":29.02,"linkquality":34,"humidity":55.58,"battery":100,"voltage":3005}
+
+    would expose the following metrics:
+
+        temperature{topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM"} 29.300000
+        linkquality{topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM"} 34.000000
+        humidity{topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM"} 54.700000
+        battery{topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM"} 100.000000
+        voltage{topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM"} 3005.000000
 
 # Installation
 
