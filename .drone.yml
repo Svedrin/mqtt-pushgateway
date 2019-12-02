@@ -7,3 +7,7 @@ steps:
   settings:
     repo: docker.funzt-halt.net/mqtt-pushgateway
     tags: latest
+
+trigger:
+  branch:
+  - master
