@@ -62,7 +62,7 @@ class Topic(object):
             self.value = float(value)
             self.is_numeric = True
         except (TypeError, ValueError):
-            self.value = value.decode("utf-8")
+            self.value = value
             self.known_vals.add(self.value)
             self.is_numeric = False
 
@@ -125,12 +125,18 @@ def http_metrics():
 
 
 def on_message(client, userdata, message):
+    topic = message.topic
     try:
-        metrics[message.topic].update(message.topic, message.payload)
+        payload = message.payload.decode("utf-8")
     except:
-        logging.warning("Value is neither numeric nor valid utf-8, ignored", exc_info=True)
+        logging.warning("Payload for '%s' is not valid utf-8, ignored" % topic, exc_info=True)
     else:
-        logging.info("Message received: %s => %s", message.topic, message.payload)
+        logging.info("Message received: %s => %s", topic, payload)
+
+    try:
+        metrics[topic].update(topic, payload)
+    except:
+        logging.warning("Metric update for '%s' failed" % topic, exc_info=True)
 
 
 def main():
