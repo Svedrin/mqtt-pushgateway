@@ -1,3 +1,4 @@
+---
 kind: pipeline
 name: default
 
@@ -7,3 +8,13 @@ steps:
   settings:
     repo: docker.funzt-halt.net/mqtt-pushgateway
     tags: latest
+  when:
+    branch: master
+    event:
+      exclude:
+      - pull_request
+---
+kind: signature
+hmac: 690ac2c10c20711c0e5ec9d8e46c5f6135fae46493a9f239f601b5c227d23103
+
+...
