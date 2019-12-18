@@ -1,3 +1,4 @@
+---
 kind: pipeline
 name: default
 
@@ -5,9 +6,18 @@ steps:
 - name: build docker image
   image: plugins/docker
   settings:
-    repo: docker.funzt-halt.net/mqtt-pushgateway
-    tags: latest
+    repo: svedrin/mqtt-pushgateway
+    username: svedrin
+    password:
+      from_secret: docker-registry-pw
+    cache_from: "svedrin/mqtt-pushgateway:latest"
+  when:
+    branch: master
+    event:
+      exclude:
+      - pull_request
+---
+kind: signature
+hmac: dca1de31b29a4f2d489969ddd585c5eb52d1dfeea4fddaa21e80872625ee61b0
 
-trigger:
-  branch:
-  - master
+...

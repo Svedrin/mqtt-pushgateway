@@ -125,23 +125,27 @@ def http_metrics():
     return Response('\n'.join(content + ['']), mimetype="text/plain")
 
 
-def update_topic(topic, message):
-    try:
-        metrics[topic].update(topic, message)
-    except:
-        logging.warning("Value is neither numeric nor valid utf-8, ignored", exc_info=True)
-    else:
-        logging.info("Message received: %s => %s", topic, message)
-
-
 def on_message(client, userdata, message):
+    topic = message.topic
     try:
-        json_message = json.loads(message.payload)
-        for k, v in json_message.items():
-            topic = "{}/{}".format(message.topic, k)
-            update_topic(topic, v)
-    except (ValueError):
-        update_topic(message.topic, message.payload)
+        payload = message.payload.decode("utf-8")
+    except:
+        logging.warning("Payload for '%s' is not valid utf-8, ignored" % topic, exc_info=True)
+    else:
+        logging.info("Message received: %s => %s", topic, payload)
+
+    try:
+        json_message = json.loads(payload)
+    except ValueError:
+        # payload is not json, do a standard update
+        try:
+            metrics[topic].update(topic, payload)
+        except:
+            logging.warning("Metric update for '%s' failed" % topic, exc_info=True)
+    else:
+        for key, val in json_message.items():
+            key_topic = "{}/{}".format(topic, key)
+            metrics[key_topic].update(key_topic, val)
 
 
 def main():
