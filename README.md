@@ -48,11 +48,11 @@ Caveat: Only float values are supported. Anything else will be ignored.
 
     would expose the following metrics:
 
-        temperature{topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM"} 29.300000
-        linkquality{topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM"} 34.000000
-        humidity{topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM"} 54.700000
-        battery{topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM"} 100.000000
-        voltage{topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM"} 3005.000000
+        temperature{topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/temperature"} 29.300000
+        linkquality{topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/linkquality"} 34.000000
+        humidity{topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/humidity"} 54.700000
+        battery{topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/battery"} 100.000000
+        voltage{topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/voltage"} 3005.000000
 
 # Installation
 
