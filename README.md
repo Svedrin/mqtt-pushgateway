@@ -42,7 +42,7 @@ Caveat: Only float values are supported. Anything else will be ignored.
 *   Topics that were matched in a subscription pattern can be hidden from the
     result through a topic configuration.
 
-*   JSON messages record each key:value pair as a unique metric, eg: the payload:
+*   JSON messages record each key:value pair as a unique metric, eg: the following payload sent on topic `zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM`:
 
         {"temperature":29.02,"linkquality":34,"humidity":55.58,"battery":100,"voltage":3005}
 
