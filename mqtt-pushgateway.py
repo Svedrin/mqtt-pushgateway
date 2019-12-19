@@ -7,6 +7,7 @@ import pytoml
 import logging
 import socket
 import time
+import json
 
 import paho.mqtt.client as mqttClient
 
@@ -134,9 +135,17 @@ def on_message(client, userdata, message):
         logging.info("Message received: %s => %s", topic, payload)
 
     try:
-        metrics[topic].update(topic, payload)
-    except:
-        logging.warning("Metric update for '%s' failed" % topic, exc_info=True)
+        json_message = json.loads(payload)
+    except ValueError:
+        # payload is not json, do a standard update
+        try:
+            metrics[topic].update(topic, payload)
+        except:
+            logging.warning("Metric update for '%s' failed" % topic, exc_info=True)
+    else:
+        for key, val in json_message.items():
+            key_topic = "{}/{}".format(topic, key)
+            metrics[key_topic].update(key_topic, val)
 
 
 def main():
