@@ -1,10 +1,10 @@
-# Copy this file to config.toml to use it.
+# config.toml used for integration tests. See config.example.toml for
+# one that is more useful for you.
 
 [exporter]
 listen = "0.0.0.0"
 port   = 9466
 
-# Configure your MQTT broker's address and credentials here.
 [mqtt]
 client_id = "mqtt_pushgw-%(hostname)s"
 broker    = "broker"
@@ -12,18 +12,13 @@ port      = 1883
 username  = ""
 password  = ""
 
-# List some keys we should subscribe to. Use '#' to subscribe to *everything*.
-# We will ignore any messages that can't be directly parsed as floats.
 subscribe = [
     'sensor/#',
     'zigbee2mqtt/#',
     "otherTopic"
 ]
 
-# Expire metrics after 5 Minutes. Can be overridden in the [[topic]] sections.
-# Comment to disable.
 expire = 300
-
 
 [[topic]]
 match  = 'sensor/(?P<sensor_name>\w+)/(?P<__metric__>\w+)'
