@@ -27,7 +27,7 @@ Feature: MQTT stuff.
 
      when Topic zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM receives message of
         """
-        {"temperature":29.02,"linkquality":34,"humidity":55.58,"battery":100,"voltage":3005}
+        {"temperature":29.02,"linkquality":34,"humidity":55.58,"battery":100,"voltage":3005,"status":"online"}
         """
      then Metric 'temperature{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/temperature"}' exists
       and its value is equal to 29.02
@@ -39,3 +39,13 @@ Feature: MQTT stuff.
       and its value is equal to 100.0
      then Metric 'voltage{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/voltage"}' exists
       and its value is equal to 3005.0
+     then Metric 'status{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/status",status="online"}' exists
+      and its value is equal to 1.0
+     when Topic zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM receives message of
+        """
+        {"status":"offline"}
+        """
+     then Metric 'status{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/status",status="online"}' exists
+      and its value is equal to 0.0
+     then Metric 'status{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/status",status="offline"}' exists
+      and its value is equal to 1.0

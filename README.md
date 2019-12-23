@@ -44,7 +44,7 @@ Caveat: Only float values are supported. Anything else will be ignored.
 
 *   JSON messages record each key:value pair as a unique metric, eg: the following payload sent on topic `zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM`:
 
-        {"temperature":29.02,"linkquality":34,"humidity":55.58,"battery":100,"voltage":3005}
+        {"temperature":29.02,"linkquality":34,"humidity":55.58,"battery":100,"voltage":3005,"status":"online"}
 
     would expose the following metrics:
 
@@ -53,6 +53,7 @@ Caveat: Only float values are supported. Anything else will be ignored.
         humidity{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/humidity"} 55.580000
         battery{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/battery"} 100.000000
         voltage{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/voltage"} 3005.000000
+        status{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/status",status="online"} 1.0
 
 # Installation
 
