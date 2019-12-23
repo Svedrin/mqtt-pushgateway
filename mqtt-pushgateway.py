@@ -134,16 +134,17 @@ def on_message(client, userdata, message):
     else:
         logging.info("Message received: %s => %s", topic, payload)
 
-    try:
-        json_message = json.loads(payload)
-    except ValueError:
-        # payload is not json, do a standard update
-        pass
-    else:
-        for key, val in json_message.items():
-            key_topic = "{}/{}".format(topic, key)
-            metrics[key_topic].update(key_topic, val)
-        return
+    if payload[0] == "{" and payload[-1] == "}":
+        try:
+            json_message = json.loads(payload)
+        except ValueError:
+            # payload is not json, do a standard update
+            pass
+        else:
+            for key, val in json_message.items():
+                key_topic = "{}/{}".format(topic, key)
+                metrics[key_topic].update(key_topic, val)
+            return
 
     try:
         metrics[topic].update(topic, payload)
