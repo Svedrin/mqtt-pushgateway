@@ -9,7 +9,7 @@ import socket
 import time
 import json
 
-import paho.mqtt.client as mqttClient
+import paho.mqtt.client as mqtt
 
 from collections import defaultdict
 from datetime    import datetime, timedelta
@@ -153,7 +153,7 @@ def on_message(client, userdata, message):
         logging.warning("Metric update for '%s' failed" % topic, exc_info=True)
 
 def main():
-    client = mqttClient.Client(config["mqtt"]["client_id"] % dict(
+    client = mqtt.Client(config["mqtt"]["client_id"] % dict(
         hostname=socket.gethostname()
     ))
     client.username_pw_set(config["mqtt"]["username"], config["mqtt"]["password"])

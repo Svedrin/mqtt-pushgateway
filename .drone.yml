@@ -2,7 +2,21 @@
 kind: pipeline
 name: default
 
+services:
+- name: broker
+  image: eclipse-mosquitto
+
 steps:
+- name: run tests
+  image: alpine:latest
+  commands:
+  - apk add --no-cache python3
+  - cp -r /drone/src /tmp/src
+  - pip3 install --no-cache-dir -r /tmp/src/requirements.txt
+  - pip3 install --no-cache-dir behave
+  - mv /tmp/src/config.tests.toml /tmp/src/config.toml
+  - cd /tmp/src && python3 -m behave
+
 - name: build docker image
   image: plugins/docker
   settings:
@@ -18,6 +32,6 @@ steps:
       - pull_request
 ---
 kind: signature
-hmac: dca1de31b29a4f2d489969ddd585c5eb52d1dfeea4fddaa21e80872625ee61b0
+hmac: 08431f201762d04937c91712bd562f1ac689ddab046de1cc06f74fdfbd3f2853
 
 ...

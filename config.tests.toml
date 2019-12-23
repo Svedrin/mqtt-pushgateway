@@ -1,0 +1,37 @@
+# Copy this file to config.toml to use it.
+
+[exporter]
+listen = "0.0.0.0"
+port   = 9466
+
+# Configure your MQTT broker's address and credentials here.
+[mqtt]
+client_id = "mqtt_pushgw-%(hostname)s"
+broker    = "broker"
+port      = 1883
+username  = ""
+password  = ""
+
+# List some keys we should subscribe to. Use '#' to subscribe to *everything*.
+# We will ignore any messages that can't be directly parsed as floats.
+subscribe = [
+    'sensor/#',
+    "otherTopic"
+]
+
+# Expire metrics after 5 Minutes. Can be overridden in the [[topic]] sections.
+# Comment to disable.
+expire = 300
+
+
+[[topic]]
+match  = 'sensor/(?P<sensor_name>\w+)/(?P<__metric__>\w+)'
+
+[[topic]]
+match  = 'sensor/slow_sensor/super_slow_metric'
+expire = 900
+metric = "just_a_metric"
+
+[[topic]]
+match  = 'sensor/sucky_sensor/.*'
+ignore = true
