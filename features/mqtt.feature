@@ -1,12 +1,15 @@
 Feature: MQTT stuff.
 
-  Scenario: Float values
+  Scenario: Numeric values
 
      when Topic sensor/bathroom/temperature receives message with payload "15.2"
+      and Topic sensor/bathroom/humidity receives message with payload "36"
      then Metric 'temperature{sensor_name="bathroom",mqtt_topic="sensor/bathroom/temperature"}' exists
       and its value is equal to 15.2
       and Metric 'mqtt_data_age{sensor_name="bathroom",mqtt_topic="sensor/bathroom/temperature",metric="temperature"}' exists
       and its value is less than 0.5
+     then Metric 'humidity{sensor_name="bathroom",mqtt_topic="sensor/bathroom/humidity"}' exists
+      and its value is equal to 36.0
 
   Scenario: String values
 
