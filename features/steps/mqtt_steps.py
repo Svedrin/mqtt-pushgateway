@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-import threading
-
 from time import sleep
 from behave import given, when, then
 
@@ -20,19 +18,15 @@ def get_metrics():
         if line
     ])
 
-@given('App is running')
-def step(context):
-    context.mqtt_pushgateway = threading.Thread(target=mqtt_pushgateway.main)
-    context.mqtt_pushgateway.daemon = True
-    context.mqtt_pushgateway.start()
-    context.dirty = False
-    context.metrics = {}
-    sleep(0.1)
-
 @when('Topic {topic} receives message with payload "{payload}"')
 def step(context, topic, payload):
     context.dirty = True
     context.publish(topic, payload.encode("UTF-8"))
+
+@when('Topic {topic} receives message of')
+def step(context, topic):
+    context.dirty = True
+    context.publish(topic, context.text.encode("UTF-8"))
 
 @then("Metric '{metric}' exists")
 def step(context, metric):

@@ -16,6 +16,7 @@ password  = ""
 # We will ignore any messages that can't be directly parsed as floats.
 subscribe = [
     'sensor/#',
+    'zigbee2mqtt/#',
     "otherTopic"
 ]
 
