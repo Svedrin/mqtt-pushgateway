@@ -132,6 +132,7 @@ def on_message(client, userdata, message):
     except:
         logging.warning("Payload for '%s' is not valid utf-8, ignored" % topic, exc_info=True)
     else:
+        payload = payload.strip()
         logging.info("Message received: %s => %s", topic, payload)
 
     if payload[0] == "{" and payload[-1] == "}":
