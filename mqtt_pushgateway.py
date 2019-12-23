@@ -109,7 +109,7 @@ class Topic(object):
             return "\n".join(series)
 
 
-metrics = defaultdict(lambda: Topic())
+metrics = defaultdict(Topic)
 
 
 @app.route("/")
