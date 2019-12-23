@@ -138,15 +138,17 @@ def on_message(client, userdata, message):
         json_message = json.loads(payload)
     except ValueError:
         # payload is not json, do a standard update
-        try:
-            metrics[topic].update(topic, payload)
-        except:
-            logging.warning("Metric update for '%s' failed" % topic, exc_info=True)
+        pass
     else:
         for key, val in json_message.items():
             key_topic = "{}/{}".format(topic, key)
             metrics[key_topic].update(key_topic, val)
+        return
 
+    try:
+        metrics[topic].update(topic, payload)
+    except:
+        logging.warning("Metric update for '%s' failed" % topic, exc_info=True)
 
 def main():
     client = mqttClient.Client(config["mqtt"]["client_id"] % dict(
