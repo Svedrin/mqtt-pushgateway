@@ -6,7 +6,7 @@ After=network.target
 [Service]
 Environment=PYTHONIOENCODING=utf-8
 WorkingDirectory=/opt/mqtt-pushgateway
-ExecStart=/opt/mqtt-pushgateway/mqtt-pushgateway.py
+ExecStart=/opt/mqtt-pushgateway/mqtt_pushgateway.py
 User=prometheus
 
 [Install]
