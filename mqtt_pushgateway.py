@@ -60,17 +60,31 @@ class Topic(object):
 
             self.keywords["mqtt_topic"] = topic
 
-        try:
-            self.value = float(value)
-            self.is_numeric = True
-        except (TypeError, ValueError):
+        def _try_float(value):
             try:
-                self.value = parse_date(value).timestamp()
-                self.is_numeric = True
+                return float(value)
+            except (TypeError, ValueError):
+                return None
+
+        def _try_date(value):
+            # See if YYYY-MM-DD or starts with YYYY-MM-DD[T ]HH:MM:SS
+            if not re.match(r'^\d\d\d\d\-\d\d\-\d\d([T ]\d\d:\d\d:\d\d.*)?', value):
+                return None
+            try:
+                return parse_date(value).timestamp()
             except ParserError:
-                self.value = value
-                self.known_vals.add(self.value)
-                self.is_numeric = False
+                return None
+
+        if (parsed_value := _try_float(value)) is not None:
+            self.value = parsed_value
+            self.is_numeric = True
+        elif (parsed_value := _try_date(value)) is not None:
+            self.value = parsed_value
+            self.is_numeric = True
+        else:
+            self.value = value
+            self.known_vals.add(self.value)
+            self.is_numeric = False
 
         self.last_update = datetime.now()
 
