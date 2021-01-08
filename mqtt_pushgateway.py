@@ -14,6 +14,7 @@ import paho.mqtt.client as mqtt
 from collections import defaultdict
 from datetime    import datetime, timedelta
 
+from dateutil.parser import parse as parse_date, ParserError
 from flask import Flask, Response, redirect
 
 app = Flask("mqtt_pushgateway")
@@ -59,10 +60,28 @@ class Topic(object):
 
             self.keywords["mqtt_topic"] = topic
 
-        try:
-            self.value = float(value)
+        def _try_float(value):
+            try:
+                return float(value)
+            except (TypeError, ValueError):
+                return None
+
+        def _try_date(value):
+            # See if YYYY-MM-DD or starts with YYYY-MM-DD[T ]HH:MM:SS
+            if not re.match(r'^\d\d\d\d\-\d\d\-\d\d([T ]\d\d:\d\d:\d\d.*)?', value):
+                return None
+            try:
+                return parse_date(value).timestamp()
+            except ParserError:
+                return None
+
+        if (parsed_value := _try_float(value)) is not None:
+            self.value = parsed_value
             self.is_numeric = True
-        except (TypeError, ValueError):
+        elif (parsed_value := _try_date(value)) is not None:
+            self.value = parsed_value
+            self.is_numeric = True
+        else:
             self.value = value
             self.known_vals.add(self.value)
             self.is_numeric = False
