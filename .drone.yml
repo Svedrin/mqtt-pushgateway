@@ -8,9 +8,9 @@ services:
 
 steps:
 - name: run tests
-  image: alpine:latest
+  image: alpine:3.12
   commands:
-  - apk add --no-cache python3
+  - apk add --no-cache python3 py3-pip
   - cp -r /drone/src /tmp/src
   - pip3 install --no-cache-dir -r /tmp/src/requirements.txt
   - pip3 install --no-cache-dir behave
@@ -32,6 +32,6 @@ steps:
       - pull_request
 ---
 kind: signature
-hmac: 08431f201762d04937c91712bd562f1ac689ddab046de1cc06f74fdfbd3f2853
+hmac: 7ee456db7c8b825ba38b2f415de1547f1fa79efb9822c8241e8302bd4e707074
 
 ...

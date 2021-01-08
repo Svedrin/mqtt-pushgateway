@@ -1,6 +1,6 @@
-FROM alpine:latest
+FROM alpine:3.12
 
-RUN apk add --no-cache python3
+RUN apk add --no-cache python3 py3-pip
 
 COPY . /app
 WORKDIR /config
