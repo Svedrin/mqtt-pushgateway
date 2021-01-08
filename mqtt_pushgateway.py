@@ -14,6 +14,7 @@ import paho.mqtt.client as mqtt
 from collections import defaultdict
 from datetime    import datetime, timedelta
 
+from dateutil.parser import parse as parse_date, ParserError
 from flask import Flask, Response, redirect
 
 app = Flask("mqtt_pushgateway")
@@ -63,9 +64,13 @@ class Topic(object):
             self.value = float(value)
             self.is_numeric = True
         except (TypeError, ValueError):
-            self.value = value
-            self.known_vals.add(self.value)
-            self.is_numeric = False
+            try:
+                self.value = parse_date(value).timestamp()
+                self.is_numeric = True
+            except ParserError:
+                self.value = value
+                self.known_vals.add(self.value)
+                self.is_numeric = False
 
         self.last_update = datetime.now()
 
