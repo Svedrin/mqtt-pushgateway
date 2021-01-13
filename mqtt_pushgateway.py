@@ -163,7 +163,7 @@ def on_message(client, userdata, message):
             json_message = json.loads(payload)
         except ValueError:
             # payload is not json, do a standard update
-            pass
+            logging.warning("Failed to parse json value for '%s'", topic, exc_info=True)
         else:
 
             def _flatten(into_result, prefix, val):
@@ -185,7 +185,7 @@ def on_message(client, userdata, message):
     try:
         metrics[topic].update(topic, payload)
     except:
-        logging.warning("Metric update for '%s' failed" % topic, exc_info=True)
+        logging.warning("Metric update for '%s' failed", topic, exc_info=True)
 
 def main():
     client = mqtt.Client(config["mqtt"]["client_id"] % dict(
