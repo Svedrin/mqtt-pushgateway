@@ -9,7 +9,7 @@ def get_metrics():
     prom_data = mqtt_pushgateway.http_metrics().data.decode("UTF-8")
 
     def floatify(line):
-        key, val = line.split()
+        key, val = line.split(" ", 1)
         return key, float(val)
 
     return dict([
