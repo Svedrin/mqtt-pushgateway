@@ -161,7 +161,19 @@ def on_message(client, userdata, message):
             # payload is not json, do a standard update
             pass
         else:
-            for key, val in json_message.items():
+
+            def _flatten(into_result, prefix, val):
+                if isinstance(val, dict):
+                    for inner_key, inner_val in val.items():
+                        _flatten(into_result, prefix + [inner_key], inner_val)
+                elif isinstance(val, list):
+                    for idx, elem in enumerate(val):
+                        _flatten(into_result, prefix + [str(idx)], inner_val)
+                else:
+                    into_result["/".join(prefix)] = val
+                return into_result
+
+            for key, val in _flatten({}, prefix=[], val=json_message).items():
                 key_topic = "{}/{}".format(topic, key)
                 metrics[key_topic].update(key_topic, val)
             return
