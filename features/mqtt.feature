@@ -42,6 +42,11 @@ Feature: MQTT stuff.
             "nested2": {
                 "something": 5678
             },
+            "nested3": {
+                "nested4": {
+                    "something": 9012.34
+                }
+            },
             "status": "online",
             "Time": "2021-01-08T14:31:48"
         }
@@ -60,6 +65,8 @@ Feature: MQTT stuff.
       and its value is equal to 1234.0
      then Metric 'something{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/nested2/something"}' exists
       and its value is equal to 5678.0
+     then Metric 'something{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/nested3/nested4/something"}' exists
+      and its value is equal to 9012.34
      then Metric 'Time{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/Time"}' exists
       and its value is equal to 1610116308.0
      then Metric 'status{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/status",status="online"}' exists
