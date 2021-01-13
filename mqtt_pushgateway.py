@@ -82,7 +82,11 @@ class Topic(object):
             self.value = parsed_value
             self.is_numeric = True
         else:
-            self.value = value.replace("\n", "").replace("\r", "").replace(" ", "")
+            self.value = (value
+                          .replace("\n", "")
+                          .replace("\r", "")
+                          .replace(" ", "")
+                          .replace('"', ""))
             self.known_vals.add(self.value)
             self.is_numeric = False
 
