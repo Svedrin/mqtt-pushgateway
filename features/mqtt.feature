@@ -36,6 +36,12 @@ Feature: MQTT stuff.
             "humidity": 55.58,
             "battery": 100,
             "voltage": 3005,
+            "nested1": {
+                "something": 1234
+            },
+            "nested2": {
+                "something": 5678
+            },
             "status": "online",
             "Time": "2021-01-08T14:31:48"
         }
@@ -50,6 +56,10 @@ Feature: MQTT stuff.
       and its value is equal to 100.0
      then Metric 'voltage{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/voltage"}' exists
       and its value is equal to 3005.0
+     then Metric 'something{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/nested1/something"}' exists
+      and its value is equal to 1234.0
+     then Metric 'something{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/nested2/something"}' exists
+      and its value is equal to 5678.0
      then Metric 'Time{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/Time"}' exists
       and its value is equal to 1610116308.0
      then Metric 'status{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/status",status="online"}' exists
