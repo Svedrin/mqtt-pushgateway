@@ -47,6 +47,11 @@ Feature: MQTT stuff.
                     "something": 9012.34
                 }
             },
+            "list_of_leet": [
+                {"leet": 1.337},
+                {"leet": 13.37},
+                {"leet": 133.7}
+            ],
             "status": "online",
             "Time": "2021-01-08T14:31:48"
         }
@@ -67,6 +72,12 @@ Feature: MQTT stuff.
       and its value is equal to 5678.0
      then Metric 'something{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/nested3/nested4/something"}' exists
       and its value is equal to 9012.34
+     then Metric 'leet{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/list_of_leet/0/leet"}' exists
+      and its value is equal to 1.337
+     then Metric 'leet{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/list_of_leet/1/leet"}' exists
+      and its value is equal to 13.37
+     then Metric 'leet{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/list_of_leet/2/leet"}' exists
+      and its value is equal to 133.7
      then Metric 'Time{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/Time"}' exists
       and its value is equal to 1610116308.0
      then Metric 'status{mqtt_topic="zigbee2mqtt/sensor/lounge/xiaomi/WSDCGQ01LM/status",status="online"}' exists
