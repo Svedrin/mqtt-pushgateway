@@ -174,7 +174,11 @@ def on_message(client, userdata, message):
                     for idx, elem in enumerate(val):
                         _flatten(into_result, prefix + [str(idx)], elem)
                 else:
-                    into_result["/".join(prefix)] = val
+                    try:
+                        into_result["/".join(prefix)] = float(val)
+                    except ValueError:
+                        # try boolean
+                        into_result["/".join(prefix)] = bool(val.lower() in ['true', ['on'], 't'])
                 return into_result
 
             for key, val in _flatten({}, prefix=[], val=json_message).items():
