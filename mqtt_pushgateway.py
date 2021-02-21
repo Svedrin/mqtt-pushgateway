@@ -174,11 +174,7 @@ def on_message(client, userdata, message):
                     for idx, elem in enumerate(val):
                         _flatten(into_result, prefix + [str(idx)], elem)
                 else:
-                    try:
-                        into_result["/".join(prefix)] = float(val)
-                    except ValueError:
-                        # try boolean
-                        into_result["/".join(prefix)] = bool(val.lower() in ['true', ['on'], 't'])
+                    into_result["/".join(prefix)] = float(val)
                 return into_result
 
             for key, val in _flatten({}, prefix=[], val=json_message).items():
@@ -187,6 +183,11 @@ def on_message(client, userdata, message):
             return
 
     try:
+        if payload.lower() in ['true', 'on', 't']:
+                payload = int(1)
+        elif payload.lower() in ['false', 'off',' f']:
+                payload = int(0)
+
         metrics[topic].update(topic, payload)
     except:
         logging.warning("Metric update for '%s' failed", topic, exc_info=True)
