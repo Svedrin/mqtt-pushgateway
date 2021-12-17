@@ -9,6 +9,10 @@ platform:
 services:
 - name: broker
   image: eclipse-mosquitto
+  commands:
+  - echo listener 1883 0.0.0.0 >  /tmp/mosquitto.conf
+  - echo allow_anonymous true  >> /tmp/mosquitto.conf
+  - /usr/sbin/mosquitto -c /tmp/mosquitto.conf
 
 steps:
 - name: run tests
@@ -92,6 +96,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: a2af1e4e6adbfb0038fcec45c67b75bd2d222631cc64bab1a04201c4a3589fe7
+hmac: 507b9e5a37aaf6ef3d58511db2ec82924cd71e1abd7314776728768ff0d7ba1c
 
 ...
