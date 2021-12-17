@@ -1,6 +1,10 @@
 ---
 kind: pipeline
-name: default
+name: linux-amd64-latest
+
+platform:
+  arch: amd64
+  os: linux
 
 services:
 - name: broker
@@ -21,6 +25,7 @@ steps:
   image: plugins/docker
   settings:
     repo: svedrin/mqtt-pushgateway
+    tags: latest-amd64
     username: svedrin
     password:
       from_secret: docker-registry-pw
@@ -30,8 +35,63 @@ steps:
     event:
       exclude:
       - pull_request
+
+---
+kind: pipeline
+name: linux-armv7l-latest
+
+platform:
+  arch: arm
+  os: linux
+
+steps:
+- name: build docker image
+  image: plugins/docker
+  settings:
+    repo: svedrin/mqtt-pushgateway
+    tags: latest-armv7l
+    username: svedrin
+    password:
+      from_secret: docker-registry-pw
+    cache_from: "svedrin/mqtt-pushgateway:latest"
+
+trigger:
+  branch: master
+  event:
+    exclude:
+    - pull_request
+
+depends_on:
+- linux-amd64-latest
+
+---
+kind: pipeline
+type: docker
+name: manifest-latest
+
+steps:
+- name: publish
+  image: plugins/manifest:1.2
+  settings:
+    ignore_missing: true
+    spec: docker-manifest-latest.tmpl
+    username: svedrin
+    password:
+      from_secret: docker-registry-pw
+
+trigger:
+  branch: master
+  event:
+    exclude:
+    - pull_request
+
+depends_on:
+- linux-amd64-latest
+- linux-armv7l-latest
+
+
 ---
 kind: signature
-hmac: 7ee456db7c8b825ba38b2f415de1547f1fa79efb9822c8241e8302bd4e707074
+hmac: a2af1e4e6adbfb0038fcec45c67b75bd2d222631cc64bab1a04201c4a3589fe7
 
 ...

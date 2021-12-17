@@ -1,0 +1,14 @@
+image: svedrin/mqtt-pushgateway:latest
+
+manifests:
+
+  - image: svedrin/mqtt-pushgateway:latest-amd64
+    platform:
+      architecture: amd64
+      os: linux
+
+  - image: svedrin/mqtt-pushgateway:latest-armv7l
+    platform:
+      architecture: arm
+      os: linux
+      variant: v7
