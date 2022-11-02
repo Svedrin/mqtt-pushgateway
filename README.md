@@ -66,5 +66,4 @@ Caveat: Only float values are supported. Anything else will be ignored.
 
 You can also use Docker:
 
-* `docker build -t mqtt-exporter:latest .`
-* `docker run -p 9466:9466 -v config.toml:/config/config.toml mqtt-exporter:latest`
+* `docker run -d --name mqtt-pushgw -p 9466:9466 -v config.toml:/config/config.toml svedrin/mqtt-pushgateway:latest`
