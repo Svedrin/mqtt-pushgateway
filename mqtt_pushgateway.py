@@ -68,8 +68,13 @@ class Topic(object):
 
         def _try_date(value):
             # See if YYYY-MM-DD or starts with YYYY-MM-DD[T ]HH:MM:SS
-            if not re.match(r'^\d\d\d\d\-\d\d\-\d\d([T ]\d\d:\d\d:\d\d.*)?', value):
-                return None
+            try:
+                if not re.match(r'^\d\d\d\d\-\d\d\-\d\d([T ]\d\d:\d\d:\d\d.*)?', value):
+                    return None
+            except TypeError:
+                logging.error('Failed to match "%r" against a regex' % value, exc_info=True)
+                return None # it's probably not a date then
+
             try:
                 return parse_date(value).timestamp()
             except ParserError:
