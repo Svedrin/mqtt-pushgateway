@@ -178,7 +178,7 @@ def on_message(client, userdata, message):
                 elif isinstance(val, list):
                     for idx, elem in enumerate(val):
                         _flatten(into_result, prefix + [str(idx)], elem)
-                else:
+                elif val is not None:
                     into_result["/".join(prefix)] = val
                 return into_result
 
