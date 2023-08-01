@@ -72,7 +72,7 @@ class Topic(object):
                 if not re.match(r'^\d\d\d\d\-\d\d\-\d\d([T ]\d\d:\d\d:\d\d.*)?', value):
                     return None
             except TypeError:
-                logging.error('Failed to match "%r" against a regex' % value, exc_info=True)
+                logging.warning('Failed to match "%r" against a regex' % value, exc_info=True)
                 return None # it's probably not a date then
 
             try:
